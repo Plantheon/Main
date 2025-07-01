@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body text-gray-800 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold leading-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h5 {
+    @apply text-lg md:text-xl;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:ring-secondary-500;
+  }
+
+  .btn-outline {
+    @apply btn border border-gray-300 text-gray-700 hover:bg-gray-50 focus-visible:ring-primary-500;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-lg;
+  }
+
+  .btn-md {
+    @apply px-4 py-2 text-base;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden;
+  }
+
+  .input {
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .section {
+    @apply py-12 md:py-16 lg:py-24;
+  }
+
+  .heading-xl {
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+
+  .heading-lg {
+    @apply font-display text-3xl md:text-4xl font-bold;
+  }
+
+  .heading-md {
+    @apply font-display text-2xl md:text-3xl font-bold;
+  }
+
+  .heading-sm {
+    @apply font-display text-xl md:text-2xl font-bold;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+/* Calendar styles */
+.react-calendar {
+  @apply w-full max-w-md border-0 shadow-none font-body text-gray-800;
+}
+
+.react-calendar__tile {
+  @apply rounded-md;
+}
+
+.react-calendar__tile--active {
+  @apply bg-primary-600 text-white;
+}
+
+.react-calendar__tile--now {
+  @apply bg-primary-100;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  @apply text-gray-800;
+}
+
+.react-calendar__navigation button {
+  @apply hover:bg-gray-100 rounded-md;
+}
+
+.react-calendar__navigation button:disabled {
+  @apply opacity-50;
+}
+
+/* Slick carousel customization */
+.slick-dots li button:before {
+  @apply text-primary-500;
+}
+
+.slick-dots li.slick-active button:before {
+  @apply text-primary-700;
+}
