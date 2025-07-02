@@ -29,7 +29,7 @@ const AuthCallback: React.FC = () => {
   const handleAuthCode = async (code: string) => {
     try {
       // Make request to our backend API
-      const response = await fetch('http://localhost:3001/api/auth/google', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
