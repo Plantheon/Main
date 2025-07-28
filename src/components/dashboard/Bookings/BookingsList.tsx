@@ -19,6 +19,11 @@ const statusLabels: Record<BookingStatus, string> = {
   cancelled: 'cancelled',
 };
 
+const paymentTypeLabels: Record<'subscription' | 'one-time', string> = {
+  subscription: 'Subscription',
+  'one-time': 'One-Time',
+};
+
 const mockLocations = [
   'Downtown',
   'Midtown',
@@ -31,6 +36,7 @@ const BookingsList: React.FC = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [tab, setTab] = useState<'all' | 'subscriptions'>('all');
 
   useEffect(() => {
     if (user?.email) {
@@ -50,15 +56,34 @@ const BookingsList: React.FC = () => {
     }
   };
 
-  const filteredBookings = bookings.filter((b) => {
+  // Tab filtering
+  let filteredBookings = bookings.filter((b) => {
     const matchesSearch = b.garden.toLowerCase().includes(search.toLowerCase()) || b.type.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'All' || b.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+  if (tab === 'subscriptions') {
+    filteredBookings = filteredBookings.filter(b => b.paymentType === 'subscription' && b.status === 'upcoming');
+  }
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">My Bookings</h2>
+      {/* Tabs */}
+      <div className="flex gap-2 mb-6">
+        <button
+          className={`px-4 py-2 rounded-t border-b-2 font-medium transition-colors ${tab === 'all' ? 'border-primary-600 text-primary-600 bg-white' : 'border-transparent text-gray-600 bg-gray-100'}`}
+          onClick={() => setTab('all')}
+        >
+          All Bookings
+        </button>
+        <button
+          className={`px-4 py-2 rounded-t border-b-2 font-medium transition-colors ${tab === 'subscriptions' ? 'border-primary-600 text-primary-600 bg-white' : 'border-transparent text-gray-600 bg-gray-100'}`}
+          onClick={() => setTab('subscriptions')}
+        >
+          Subscriptions
+        </button>
+      </div>
       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
         <input
           type="text"
@@ -83,69 +108,100 @@ const BookingsList: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="space-y-6">
-        {filteredBookings.length === 0 && (
-          <div className="text-gray-500 text-center py-12">No bookings found.</div>
-        )}
-        {filteredBookings.map((b, i) => (
-          <div
-            key={b.id}
-            className="flex flex-col md:flex-row items-start md:items-center bg-white rounded-lg shadow p-5 gap-4 border border-gray-100"
-          >
-            {/* Image */}
-            <div className="w-20 h-20 rounded-md overflow-hidden flex-shrink-0 bg-gray-100">
-              <img
-                src={b.image || `https://source.unsplash.com/seed/garden${i}/120x120`}
-                alt={b.garden}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* Main Info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-col md:flex-row md:items-center md:gap-4">
-                <div>
-                  <div className="font-semibold text-lg leading-tight">{b.garden}</div>
-                  <div className="text-gray-500 text-sm mb-1">{b.type}</div>
-                </div>
-                <div className="flex items-center gap-2 text-gray-500 text-sm mt-1 md:mt-0">
-                  <Calendar size={16} className="mr-1" />
-                  {b.date}
-                  <span className="mx-2">|</span>
-                  {b.time}
-                  <span className="mx-2">|</span>
-                  <MapPin size={16} className="mr-1" />
-                  {mockLocations[i % mockLocations.length]}
-                </div>
+      {tab === 'subscriptions' ? (
+        <div className="space-y-6">
+          {filteredBookings.length === 0 && (
+            <div className="text-gray-500 text-center py-12">No subscriptions found.</div>
+          )}
+          {filteredBookings.map((b) => (
+            <div
+              key={b.id}
+              className="flex flex-col md:flex-row items-start md:items-center bg-white rounded-lg shadow p-5 gap-4 border border-gray-100"
+            >
+              {/* Subscription Info Only */}
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-lg leading-tight mb-1">Active Subscription</div>
+                <div className="text-gray-500 text-sm mb-2">Tier: <span className="font-medium text-primary-700">{b.type}</span></div>
+                <div className="text-gray-500 text-sm mb-2">Price: <span className="font-medium text-primary-700">${b.cost.toFixed(2)}/month</span></div>
+                <div className={`inline-block mt-2 px-2 py-1 rounded text-xs font-semibold capitalize ${b.paymentType === 'subscription' ? 'bg-secondary-100 text-secondary-700' : 'bg-blue-100 text-blue-700'}`}>{paymentTypeLabels[b.paymentType]}</div>
+                <div className="mt-2 text-xs text-gray-500">With this subscription, you can access all gardens.</div>
+                {/* Optionally, add cancel/modify actions here */}
               </div>
-              {/* Rating (if present) */}
-              {b.status === 'completed' && (
-                <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
-                  <Star size={16} fill="#facc15" className="mr-1" />
-                  You rated this {typeof (b as any).rating === 'number' ? `${(b as any).rating}/5` : '5/5'}
+              <div className="flex flex-col items-end gap-2 min-w-[100px]">
+                <div className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[b.status as BookingStatus]}`}>{statusLabels[b.status as BookingStatus]}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {filteredBookings.length === 0 && (
+            <div className="text-gray-500 text-center py-12">No bookings found.</div>
+          )}
+          {filteredBookings.map((b, i) => (
+            <div
+              key={b.id}
+              className="flex flex-col md:flex-row items-start md:items-center bg-white rounded-lg shadow p-5 gap-4 border border-gray-100"
+            >
+              {/* Image */}
+              <div className="w-20 h-20 rounded-md overflow-hidden flex-shrink-0 bg-gray-100">
+                <img
+                  src={b.image || `https://source.unsplash.com/seed/garden${i}/120x120`}
+                  alt={b.garden}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Main Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+                  <div>
+                    <div className="font-semibold text-lg leading-tight">{b.garden}</div>
+                    <div className="text-gray-500 text-sm mb-1">{b.type}</div>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-500 text-sm mt-1 md:mt-0">
+                    <Calendar size={16} className="mr-1" />
+                    {b.date}
+                    <span className="mx-2">|</span>
+                    {b.time}
+                    <span className="mx-2">|</span>
+                    <MapPin size={16} className="mr-1" />
+                    {mockLocations[i % mockLocations.length]}
+                  </div>
                 </div>
-              )}
-              {/* Actions */}
-              <div className="flex flex-wrap gap-4 mt-3 items-center">
-                <Link to={`/dashboard/bookings/${b.id}`} className="text-primary-600 hover:underline font-medium">View Details</Link>
-                {b.status === 'upcoming' && (
-                  <>
-                    <button className="text-gray-700 hover:underline font-medium">Modify</button>
-                    <button className="text-red-600 hover:underline font-medium" onClick={() => handleCancel(b.id)}>Cancel</button>
-                  </>
-                )}
+                {/* Payment Type Label */}
+                <div className={`inline-block mt-2 px-2 py-1 rounded text-xs font-semibold capitalize ${b.paymentType === 'subscription' ? 'bg-secondary-100 text-secondary-700' : 'bg-blue-100 text-blue-700'}`}>
+                  {paymentTypeLabels[b.paymentType]}
+                </div>
+                {/* Rating (if present) */}
                 {b.status === 'completed' && (
-                  <button className="text-primary-600 hover:underline font-medium">Book Again</button>
+                  <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
+                    <Star size={16} fill="#facc15" className="mr-1" />
+                    You rated this {typeof (b as any).rating === 'number' ? `${(b as any).rating}/5` : '5/5'}
+                  </div>
                 )}
+                {/* Actions */}
+                <div className="flex flex-wrap gap-4 mt-3 items-center">
+                  <Link to={`/dashboard/bookings/${b.id}`} className="text-primary-600 hover:underline font-medium">View Details</Link>
+                  {b.status === 'upcoming' && (
+                    <>
+                      <button className="text-gray-700 hover:underline font-medium">Modify</button>
+                      <button className="text-red-600 hover:underline font-medium" onClick={() => handleCancel(b.id)}>Cancel</button>
+                    </>
+                  )}
+                  {b.status === 'completed' && (
+                    <button className="text-primary-600 hover:underline font-medium">Book Again</button>
+                  )}
+                </div>
+              </div>
+              {/* Cost & Status */}
+              <div className="flex flex-col items-end gap-2 min-w-[100px]">
+                <div className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[b.status as BookingStatus]}`}>{statusLabels[b.status as BookingStatus]}</div>
+                <div className="font-semibold text-gray-700 text-lg">${b.cost.toFixed(2)}</div>
               </div>
             </div>
-            {/* Cost & Status */}
-            <div className="flex flex-col items-end gap-2 min-w-[100px]">
-              <div className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusColors[b.status as BookingStatus]}`}>{statusLabels[b.status as BookingStatus]}</div>
-              <div className="font-semibold text-gray-700 text-lg">${b.cost.toFixed(2)}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

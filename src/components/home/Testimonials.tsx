@@ -19,7 +19,7 @@ const testimonials: Testimonial[] = [
     name: "Sarah Johnson",
     role: "Yoga Instructor",
     avatar: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400",
-    content: "Urban Oasis has transformed how I conduct my yoga sessions. The wellness garden provides the perfect atmosphere for my clients to connect with nature while practicing mindfulness.",
+    content: "Plantheon has transformed how I conduct my gardening sessions. The gardening garden provides the perfect atmosphere for my clients to connect with nature while harvesting fresh produce.",
     rating: 5,
   },
   {
@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
     name: "Alicia Rodriguez",
     role: "Dog Owner",
     avatar: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400",
-    content: "Finding pet-friendly outdoor spaces in the city was always a challenge until I discovered Urban Oasis. Now my dog Max and I have our weekly green space routine!",
+    content: "Finding pet-friendly outdoor spaces in the city was always a challenge until I discovered Plantheon. Now my dog Max and I have our weekly green space routine!",
     rating: 4,
   },
   {

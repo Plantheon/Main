@@ -42,7 +42,7 @@ const DashboardHome: React.FC = () => {
     {
       id: 1,
       garden: 'Skyline Serenity',
-      type: 'Wellness Garden',
+      type: 'Gardening Garden',
       date: '2024-01-15',
       time: '2:00 PM',
       status: 'upcoming',

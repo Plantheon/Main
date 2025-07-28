@@ -11,28 +11,28 @@ interface TeamMember {
 
 const teamMembers: TeamMember[] = [
   {
-    name: "Emma Roberts",
-    role: "Founder & CEO",
-    image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Former urban planner with a passion for creating green spaces in cities. Emma founded Urban Oasis after recognizing the need for accessible garden spaces in urban environments."
+    name: "Benedikt von Bremen",
+    role: "Investor Relations",
+    image: "/personal_images/Picture 1.jpg",
+    bio: "Financial strategist and investor relations expert. Benedikt manages our investor partnerships, fundraising initiatives, and ensures sustainable financial growth for Plantheon's expansion."
   },
   {
-    name: "David Chen",
+    name: "Emile Kabert",
+    role: "Head of Operations",
+    image: "/personal_images/Picture 3.jpg",
+    bio: "Operations specialist focused on scaling our garden network efficiently. Emile oversees daily operations, manages our garden maintenance teams, and ensures smooth service delivery across all locations."
+  },
+  {
+    name: "Fleming Weiß",
+    role: "Chief Technology Officer",
+    image: "/personal_images/Picture 4.jpg",
+    bio: "Technology leader driving our digital transformation. Fleming leads our tech team in developing innovative booking platforms, mobile apps, and smart garden management systems to enhance user experience."
+  },
+  {
+    name: "Simon Rommel",
     role: "Head of Garden Design",
-    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Landscape architect with 15 years of experience designing sustainable urban gardens. David leads our team in creating functional, beautiful rooftop spaces."
-  },
-  {
-    name: "Sophia Martinez",
-    role: "Community Manager",
-    image: "https://images.pexels.com/photos/1181695/pexels-photo-1181695.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Urban gardening enthusiast and community builder. Sophia manages our growing community of garden members and organizes special events."
-  },
-  {
-    name: "Marcus Johnson",
-    role: "Technology Director",
-    image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Tech innovator focused on creating seamless digital experiences. Marcus oversees our booking platform and digital access systems."
+    image: "/personal_images/Picture 2.jpg",
+    bio: "Creative landscape architect specializing in urban garden design. Simon leads our design team in creating functional, beautiful, and sustainable rooftop gardens that maximize space utilization and user experience."
   }
 ];
 
@@ -86,9 +86,9 @@ const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Golden Circle Section */}
+      {/* Mission Section (replaces Golden Circle) */}
       <div className="py-20 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,82 +97,34 @@ const About: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="font-display text-4xl md:text-5xl font-bold text-primary-800 mb-6">
-              Our Golden Circle
+              Our Mission
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Everything we do starts with why we exist, guides how we operate, and defines what we create.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              At Plantheon, we believe that everyone deserves a daily connection to nature—no matter where they live. Our gardens are more than just green spaces; they are places to breathe, gather, and grow. 
             </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {/* Why */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="relative mb-8">
-                <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center shadow-xl">
-                  <Heart className="h-16 w-16 text-white" />
-                </div>
-                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-md">
-                  <span className="font-display text-2xl font-bold text-primary-700">Why</span>
-                </div>
+          <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center justify-center">
+            <div className="flex flex-col items-center text-center flex-1">
+              <div className="w-20 h-20 mb-4 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
+                <Heart className="h-10 w-10 text-white" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-primary-800 mb-4">Our Purpose</h3>
-              <p className="text-gray-700 leading-relaxed text-lg">
-                We exist to <strong>elevate the quality of life and well-being</strong> of people in urban centers – 
-                not just for today, but for generations to come.
-              </p>
-            </motion.div>
-
-            {/* How */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="relative mb-8">
-                <div className="w-32 h-32 mx-auto bg-gradient-to-br from-secondary-500 to-secondary-700 rounded-full flex items-center justify-center shadow-xl">
-                  <Compass className="h-16 w-16 text-white" />
-                </div>
-                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-md">
-                  <span className="font-display text-2xl font-bold text-secondary-700">How</span>
-                </div>
+              <h3 className="font-display text-2xl font-bold text-primary-800 mb-2">We Care Deeply</h3>
+              <p className="text-gray-700 text-base mb-4">Our roots are in the city, but our hearts are in nature. We create peaceful sanctuaries that invite you to slow down, recharge, and reconnect with yourself and others.</p>
+            </div>
+            <div className="flex flex-col items-center text-center flex-1">
+              <div className="w-20 h-20 mb-4 rounded-full bg-gradient-to-br from-secondary-500 to-secondary-700 flex items-center justify-center shadow-lg">
+                <Compass className="h-10 w-10 text-white" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-secondary-800 mb-4">Our Process</h3>
-              <p className="text-gray-700 leading-relaxed text-lg">
-                We create <strong>green sanctuaries</strong> where people need them most. 
-                We fuse the vibrancy of the city with the healing power of nature – for a life that truly breathes.
-              </p>
-            </motion.div>
-
-            {/* What */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="relative mb-8">
-                <div className="w-32 h-32 mx-auto bg-gradient-to-br from-accent-500 to-accent-700 rounded-full flex items-center justify-center shadow-xl">
-                  <Lightbulb className="h-16 w-16 text-white" />
-                </div>
-                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-md">
-                  <span className="font-display text-2xl font-bold text-accent-700">What</span>
-                </div>
+              <h3 className="font-display text-2xl font-bold text-secondary-800 mb-2">We Cultivate Community</h3>
+              <p className="text-gray-700 text-base mb-4">Every garden is a meeting place—a patch of green where friendships blossom and neighbors become friends. We bring people together through shared experiences and a love for the outdoors.</p>
+            </div>
+            <div className="flex flex-col items-center text-center flex-1">
+              <div className="w-20 h-20 mb-4 rounded-full bg-gradient-to-br from-accent-500 to-accent-700 flex items-center justify-center shadow-lg">
+                <Lightbulb className="h-10 w-10 text-white" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-accent-800 mb-4">Our Solution</h3>
-              <p className="text-gray-700 leading-relaxed text-lg">
-                We <strong>unlock the potential</strong> of unused urban spaces and transform them into 
-                rentable green oases that bring nature back to the city.
-              </p>
-            </motion.div>
+              <h3 className="font-display text-2xl font-bold text-accent-800 mb-2">We Transform Spaces</h3>
+              <p className="text-gray-700 text-base mb-4">From forgotten rooftops to vibrant oases, we see possibility everywhere. Our team turns unused spaces into thriving gardens that bring joy, beauty, and a breath of fresh air to the city.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -192,7 +144,7 @@ const About: React.FC = () => {
               </h2>
               <div className="space-y-6 text-gray-700 leading-relaxed">
                 <p className="text-lg">
-                  Urban Oasis began in 2021 when our founder, Emma Roberts, recognized a critical gap in urban living: 
+                  Plantheon began in 2021 when our founder, Emma Roberts, recognized a critical gap in urban living: 
                   access to nature. As a former urban planner, she witnessed firsthand how the lack of green spaces 
                   affected city residents' well-being and quality of life.
                 </p>
@@ -202,7 +154,7 @@ const About: React.FC = () => {
                   sanctuaries where urban dwellers could reconnect with nature?
                 </p>
                 <p className="text-lg">
-                  Today, Urban Oasis is more than a business – it's a movement. We've transformed over 50 rooftop 
+                  Today, Plantheon is more than a business – it's a movement. We've transformed over 50 rooftop 
                   spaces into thriving green oases, creating a network of natural sanctuaries that serve thousands 
                   of urban residents seeking balance, peace, and connection with nature.
                 </p>
@@ -218,8 +170,8 @@ const About: React.FC = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.pexels.com/photos/5531066/pexels-photo-5531066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                  alt="Urban Oasis rooftop garden transformation" 
+                  src="https://images.pexels.com/photos/9281066/pexels-photo-9281066.jpeg" 
+                  alt="Plantheon rooftop garden transformation" 
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -289,7 +241,7 @@ const About: React.FC = () => {
           >
             <h2 className="font-display text-4xl font-bold text-primary-800 mb-6">Meet Our Team</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              The passionate individuals behind Urban Oasis who work tirelessly to create and maintain 
+              The passionate individuals behind Plantheon who work tirelessly to create and maintain 
               our garden spaces and community.
             </p>
           </motion.div>

@@ -46,7 +46,7 @@ const HowItWorks: React.FC = () => {
         >
           <h2 className="font-display text-5xl text-primary-800 mb-6">How It Works</h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg font-light">
-            Urban Oasis makes it easy to discover and book your perfect rooftop retreat.
+            Plantheon makes it easy to discover and book your perfect rooftop retreat.
             Follow these simple steps to transform your urban experience.
           </p>
         </motion.div>
@@ -88,7 +88,7 @@ const HowItWorks: React.FC = () => {
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
             <div className="mb-6 md:mb-0">
               <h3 className="font-display text-3xl text-primary-800 mb-3">Ready to Find Your Urban Oasis?</h3>
-              <p className="text-primary-600 text-lg">Create an account and start booking your garden escapes today.</p>
+              <p className="text-primary-600 text-lg">Create an account and start booking your garden escapes today with Plantheon.</p>
             </div>
             <button className="btn-primary btn-lg text-lg px-10 py-4 rounded-xl shadow-md hover:shadow-lg transition-shadow">
               Get Started Now

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -9,9 +10,11 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://yourdomain.com' 
-    : 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173', // Local development
+    'https://yourdomain.com', // Production domain (replace with your real domain)
+    'https://main-1-rtxy.onrender.com' // (Optional) Render backend domain if needed
+  ],
   credentials: true
 }));
 app.use(express.json());

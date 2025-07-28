@@ -158,3 +158,10 @@
 .slick-dots li.slick-active button:before {
   @apply text-primary-700;
 }
+
+/* Remove blue outline/ring on input/textarea focus, only show caret */
+.input:focus, input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: theme('colors.primary.500'); /* keep border highlight if desired */
+}

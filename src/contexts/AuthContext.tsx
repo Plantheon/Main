@@ -11,7 +11,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  signOut: () => Promise<void>;
+  signOut: (navigate?: (path: string, options?: any) => void) => Promise<void>;
   isAuthenticated: boolean;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
@@ -64,11 +64,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = googleAuthUrl;
   };
 
-  const signOut = async () => {
+  const signOut = async (navigate?: (path: string, options?: any) => void) => {
     setLoading(true);
     try {
       setUser(null);
       localStorage.removeItem('user');
+      if (navigate) {
+        navigate('/', { state: { signedOut: true } });
+      }
     } catch (error) {
       console.error('Sign out error:', error);
       throw error;
@@ -92,4 +95,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-}; 
+};

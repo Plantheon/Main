@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Users, MapPin, Filter, Search, ArrowLeft, Star } from 'lucide-react';
+import { Clock, Users, MapPin, Filter, Search, ArrowLeft, Star, Check, Zap, Calendar as CalendarIcon, Repeat } from 'lucide-react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
-import { loadUserData, saveUserData, Booking as UserBooking } from '../utils/userData';
+import { loadUserData, saveUserData, Booking as UserBooking, UserData } from '../utils/userData';
+import { v4 as uuidv4 } from 'uuid';
+import BookingConfirmationAlert from '../components/home/BookingConfirmationAlert';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -16,95 +18,102 @@ interface Garden {
   type: string;
   location: string;
   image: string;
-  price: string;
+  oneTimePrice: number;
+  subscriptionPrice: number;
   rating: number;
   availableTimes: string[];
+  subscriptionBenefit: string;
 }
 
 const sampleGardens: Garden[] = [
   {
     id: 1,
-    name: "Skyline Serenity",
-    type: "Wellness Garden",
+    name: "Gardening",
+    type: "Gardening Garden",
     location: "Downtown",
-    image: "https://images.unsplash.com/photo-1496588152823-86ff7695e68f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
-    price: "$40/2hr",
+    image: "https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg", 
+    oneTimePrice: 40,
+    subscriptionPrice: 99,
     rating: 4.9,
-    availableTimes: ["9:00 AM", "11:00 AM", "1:00 PM", "5:00 PM"]
+    availableTimes: ["9:00 AM", "11:00 AM", "1:00 PM", "5:00 PM"],
+    subscriptionBenefit: "Unlimited visits + priority booking"
   },
   {
     id: 2,
-    name: "Social Heights",
+    name: "BBQ",
     type: "Social Garden",
     location: "Midtown",
-    image: "https://plus.unsplash.com/premium_photo-1675006717262-a8f9aed248a3?q=80&w=3164&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$60/2hr",
+    image: "https://images.pexels.com/photos/708440/pexels-photo-708440.jpeg",
+    oneTimePrice: 60,
+    subscriptionPrice: 99,
     rating: 4.8,
-    availableTimes: ["12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM"]
+    availableTimes: ["12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM"],
+    subscriptionBenefit: "8 visits/month + guest passes"
   },
   {
     id: 3,
-    name: "Paws Paradise",
+    name: "Pet's Garden",
     type: "Pet-Friendly Garden",
     location: "East Side",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2952&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$25/2hr",
+    image: "https://images.pexels.com/photos/551628/pexels-photo-551628.jpeg",
+    oneTimePrice: 25,
+    subscriptionPrice: 49,
     rating: 4.7,
-    availableTimes: ["8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"]
-  },
+    availableTimes: ["8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"],
+    subscriptionBenefit: "Unlimited visits + pet amenities"
+  }, 
   {
     id: 4,
-    name: "Active Terrace",
+    name: "Activity Parc",
     type: "Sports & Activity Garden",
     location: "West Side",
-    image: "https://images.pexels.com/photos/6208089/pexels-photo-6208089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    price: "$40/2hr",
+    image: "https://images.pexels.com/photos/13993576/pexels-photo-13993576.jpeg",
+    oneTimePrice: 60,
+    subscriptionPrice: 99,
     rating: 4.8,
-    availableTimes: ["7:00 AM", "9:00 AM", "11:00 AM", "1:00 PM", "5:00 PM"]
+    availableTimes: ["12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM"],
+    subscriptionBenefit: "8 visits/month + guest passes"
   },
-  {
-    id: 5,
-    name: "Meditation Haven",
-    type: "Wellness Garden",
-    location: "Uptown",
-    image: "https://plus.unsplash.com/premium_photo-1666946131242-b2c5cc73892a?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$40/2hr",
-    rating: 4.9,
-    availableTimes: ["8:00 AM", "10:00 AM", "12:00 PM", "4:00 PM", "6:00 PM"]
-  },
-  {
-    id: 6,
-    name: "Sunset Lounge",
-    type: "Social Garden",
-    location: "Financial District",
-    image: "https://images.unsplash.com/photo-1493246318656-5bfd4cfb29b8?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$60/2hr",
-    rating: 4.8,
-    availableTimes: ["4:00 PM", "6:00 PM", "8:00 PM"]
-  }
 ];
 
 const locations = ["All Locations", "Downtown", "Midtown", "East Side", "West Side", "Uptown", "Financial District"];
-const gardenTypes = ["All Types", "Wellness Garden", "Social Garden", "Pet-Friendly Garden", "Sports & Activity Garden"];
-const amenities = ["BBQ Grill", "Yoga Area", "Pet Play Area", "Meditation Space", "Exercise Equipment", "Lounge Seating", "Shade Structures", "Water Features"];
+const gardenTypes = ["All Types", "Gardening Garden", "Social Garden", "Pet-Friendly Garden", "Sports & Activity Garden"];
+
+const subscriptionPlans = [
+  {
+    id: 'basic',
+    name: 'Basic',
+    price: 49,
+    description: 'Perfect for occasional garden visits and solo relaxation.',
+    highlight: false,
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    price: 99,
+    description: 'Great for regular garden use with variety and premium features.',
+    highlight: true,
+  },
+  {
+    id: 'ultimate',
+    name: 'Ultimate',
+    price: 199,
+    description: 'For true garden enthusiasts with unlimited access and priority.',
+    highlight: false,
+  },
+];
 
 const Booking: React.FC = () => {
   const [date, setDate] = useState<Value>(new Date());
   const [location, setLocation] = useState("All Locations");
   const [gardenType, setGardenType] = useState("All Types");
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [selectedGarden, setSelectedGarden] = useState<Garden | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [paymentModel, setPaymentModel] = useState<'one-time' | 'subscription' | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const { user } = useAuth();
-
-  const toggleAmenity = (amenity: string) => {
-    if (selectedAmenities.includes(amenity)) {
-      setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
-    } else {
-      setSelectedAmenities([...selectedAmenities, amenity]);
-    }
-  };
+  const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[1]); // Default to Premium
+  const [confirmationAlert, setConfirmationAlert] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
 
   const filteredGardens = sampleGardens.filter(garden => {
     const locationMatch = location === "All Locations" || garden.location === location;
@@ -115,43 +124,58 @@ const Booking: React.FC = () => {
   const handleGardenSelect = (garden: Garden) => {
     setSelectedGarden(garden);
     setSelectedTime(null);
+    setPaymentModel(null);
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
   };
 
+  const handlePaymentModelSelect = (model: 'one-time' | 'subscription') => {
+    setPaymentModel(model);
+  };
+
   const handleBooking = () => {
-    if (selectedGarden && selectedTime) {
-      // Here you would typically process the booking
-      alert(`Booking confirmed for ${selectedGarden.name} on ${format(date as Date, 'MMMM dd, yyyy')} at ${selectedTime}`);
-      // Save booking to user dashboard
-      if (user?.email) {
-        const booking: UserBooking = {
-          id: `${selectedGarden.id}-${(date as Date).toISOString()}-${selectedTime}`,
-          garden: selectedGarden.name,
-          type: selectedGarden.type,
-          date: format(date as Date, 'yyyy-MM-dd'),
-          time: selectedTime,
-          status: 'upcoming',
-          cost: Number(selectedGarden.price.replace(/[^0-9.]/g, '')),
-          image: selectedGarden.image,
-        };
-        const data = loadUserData(user.email) || {
-          bookings: [],
-          paymentMethods: [],
-          paymentHistory: [],
-          profile: { name: user.name, email: user.email, image: user.image },
-        };
-        saveUserData(user.email, {
-          ...data,
-          bookings: [...data.bookings, booking],
-        });
-      }
-      // Reset the selection
+    if (!user || !user.email) {
+      setConfirmationAlert({ open: true, message: 'Please log in to make a booking.' });
+      return;
+    }
+    if (selectedGarden && selectedTime && paymentModel) {
+      let price = paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price;
+      const booking: UserBooking = {
+        id: uuidv4(),
+        garden: selectedGarden.name,
+        type: paymentModel === 'subscription' ? selectedPlan.name : selectedGarden.type,
+        date: format(date as Date, 'yyyy-MM-dd'),
+        time: selectedTime,
+        status: 'upcoming',
+        cost: price,
+        image: selectedGarden.image,
+        paymentType: paymentModel,
+      };
+      // Load existing user data or create new
+      let userData: UserData = loadUserData(user.email) || {
+        bookings: [],
+        paymentMethods: [],
+        paymentHistory: [],
+        profile: { name: user.name, email: user.email, image: user.image },
+      };
+      userData.bookings = [booking, ...userData.bookings];
+      saveUserData(user.email, userData);
+      setConfirmationAlert({
+        open: true,
+        message: `Booking confirmed for ${selectedGarden.name} on ${format(date as Date, 'MMMM dd, yyyy')} at ${selectedTime} - ${paymentModel === 'one-time' ? 'One-time payment' : selectedPlan.name + ' Subscription'}: $${price}`
+      });
       setSelectedGarden(null);
       setSelectedTime(null);
+      setPaymentModel(null);
     }
+  };
+
+  const calculateSavings = (garden: Garden) => {
+    const monthlyOneTime = garden.oneTimePrice * 4; // Assuming 4 visits per month
+    const savings = monthlyOneTime - garden.subscriptionPrice;
+    return savings > 0 ? savings : 0;
   };
 
   return (
@@ -166,18 +190,17 @@ const Booking: React.FC = () => {
           >
             <h1 className="heading-lg mb-6">Book Your Urban Oasis</h1>
             <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Find and book the perfect garden space for your needs. Use our interactive
-              calendar and filters to discover available gardens in your preferred location.
+              Find and book the perfect garden space for your needs. Choose between one-time visits or subscription plans for better value.
             </p>
           </motion.div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch">
           {/* Search and Filter Column */}
-          <div className="w-full lg:w-1/3 order-2 lg:order-1">
-            <div className="bg-white rounded-lg shadow-medium p-6 sticky top-24">
+          <div className="w-full lg:w-1/3 order-2 lg:order-1 h-full">
+            <div className="bg-white rounded-lg shadow-medium p-6 h-full flex flex-col">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">Find Gardens</h2>
                 <button 
@@ -226,26 +249,6 @@ const Booking: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="mb-6">
-                  <label className="label">Amenities</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {amenities.map((amenity) => (
-                      <div key={amenity} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`amenity-${amenity}`}
-                          checked={selectedAmenities.includes(amenity)}
-                          onChange={() => toggleAmenity(amenity)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={`amenity-${amenity}`} className="text-sm">
-                          {amenity}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 <button className="btn-primary btn-lg w-full flex items-center justify-center gap-2">
                   <Search size={18} />
                   Search Gardens
@@ -255,7 +258,7 @@ const Booking: React.FC = () => {
           </div>
 
           {/* Garden Results Column */}
-          <div className="w-full lg:w-2/3 order-1 lg:order-2">
+          <div className="w-full lg:w-2/3 order-1 lg:order-2 h-full">
             {!selectedGarden ? (
               <>
                 <div className="mb-6 flex justify-between items-center">
@@ -285,9 +288,10 @@ const Booking: React.FC = () => {
                       <div className="p-4">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="font-bold">{garden.name}</h3>
-                          <span className="bg-primary-50 text-primary-700 px-2 py-1 rounded text-sm">
-                            {garden.price}
-                          </span>
+                          <div className="text-right">
+                            <div className="text-sm text-gray-500">From</div>
+                            <div className="font-bold text-primary-600">${garden.oneTimePrice}/visit</div>
+                          </div>
                         </div>
                         <div className="flex items-center text-gray-600 text-sm mb-2">
                           <span className="bg-gray-100 px-2 py-1 rounded mr-2">{garden.type}</span>
@@ -331,7 +335,7 @@ const Booking: React.FC = () => {
                 </div>
                 
                 <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex justify-between items-start mb-6">
                     <div>
                       <h2 className="text-2xl font-bold mb-1">{selectedGarden.name}</h2>
                       <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -346,56 +350,203 @@ const Booking: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="text-xl font-bold text-primary-600">
-                      {selectedGarden.price}
-                    </div>
                   </div>
                   
+                  {/* Time Selection */}
                   <div className="mb-6">
-                    <h3 className="font-bold mb-3">Select a Time</h3>
+                    <h3 className="font-bold mb-3 flex items-center gap-2">
+                      <Clock size={18} />
+                      Select a Time
+                    </h3>
                     <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                       {selectedGarden.availableTimes.map((time) => (
                         <button
                           key={time}
-                          className={`flex items-center justify-center px-4 py-3 border rounded-md text-center transition-colors gap-2 ${
+                          className={`px-4 py-3 border rounded-md text-center transition-colors ${
                             selectedTime === time
                               ? 'bg-primary-600 text-white border-primary-600'
                               : 'border-gray-300 hover:bg-primary-50 hover:border-primary-300'
                           }`}
                           onClick={() => handleTimeSelect(time)}
                         >
-                          <Clock size={16} />
                           {time}
                         </button>
                       ))}
                     </div>
                   </div>
-                  
-                  <div className="border-t border-gray-200 pt-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <h3 className="font-bold">Booking Summary</h3>
-                        <p className="text-gray-600 text-sm">
-                          {date ? format(date as Date, 'MMMM dd, yyyy') : 'Select a date'} {selectedTime ? `at ${selectedTime}` : ''}
-                        </p>
-                      </div>
-                      <div className="text-xl font-bold">{selectedGarden.price}</div>
-                    </div>
-                    
-                    <button
-                      className="btn-primary btn-lg w-full"
-                      disabled={!selectedTime}
-                      onClick={handleBooking}
+
+                  {/* Payment Model Selection (Tabbed UI) */}
+                  {selectedTime && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mb-6"
                     >
-                      {selectedTime ? 'Confirm Booking' : 'Select a Time'}
-                    </button>
-                  </div>
+                      <h3 className="font-bold mb-4 flex items-center gap-2">
+                        <CalendarIcon size={18} />
+                        Choose Your Payment Option
+                      </h3>
+                      {/* Tab Switcher */}
+                      <div className="flex mb-6 gap-2">
+                        <button
+                          className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold text-base transition-all border-b-4 shadow-sm focus:outline-none duration-150
+                            ${paymentModel === 'subscription'
+                              ? 'bg-primary-100 border-primary-600 text-primary-800 shadow-md scale-105'
+                              : 'bg-white border-gray-200 text-gray-500 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-400'}
+                          `}
+                          onClick={() => setPaymentModel('subscription')}
+                          type="button"
+                          style={{ minWidth: '140px', cursor: 'pointer' }}
+                        >
+                          <span><Repeat size={18} className={paymentModel === 'subscription' ? 'text-primary-600' : 'text-gray-400'} /></span>
+                          Recurring
+                        </button>
+                        <button
+                          className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold text-base transition-all border-b-4 shadow-sm focus:outline-none duration-150
+                            ${paymentModel === 'one-time'
+                              ? 'bg-primary-100 border-primary-600 text-primary-800 shadow-md scale-105'
+                              : 'bg-white border-gray-200 text-gray-500 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-400'}
+                          `}
+                          onClick={() => setPaymentModel('one-time')}
+                          type="button"
+                          style={{ minWidth: '140px', cursor: 'pointer' }}
+                        >
+                          <span><Zap size={18} className={paymentModel === 'one-time' ? 'text-primary-600' : 'text-gray-400'} /></span>
+                          One-Time
+                        </button>
+                      </div>
+                      {/* Payment Option Content */}
+                      <div className="rounded-b-lg bg-white shadow p-6">
+                        {paymentModel === 'one-time' && (
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h4 className="font-bold text-lg mb-1">One-Time Visit</h4>
+                                <p className="text-gray-600 text-sm mb-2">Perfect for trying out</p>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    2-hour garden access
+                                  </li>
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    All basic amenities
+                                  </li>
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    No commitment
+                                  </li>
+                                </ul>
+                              </div>
+                              <div className="flex flex-col items-end">
+                                <span className="text-4xl font-bold text-gray-900">${selectedGarden.oneTimePrice}</span>
+                                <span className="text-gray-600 ml-1">/2 hours</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {paymentModel === 'subscription' && (
+                          <div className="space-y-6">
+                            <div className="mb-2">
+                              <h4 className="font-bold text-lg mb-1">Choose Your Plan</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                {subscriptionPlans.map((plan) => (
+                                  <div
+                                    key={plan.id}
+                                    className={`relative border-2 rounded-lg p-6 cursor-pointer transition-all flex flex-col items-start space-y-2 ${selectedPlan.id === plan.id ? 'border-primary-500 bg-primary-50 shadow-lg' : 'border-gray-200 hover:border-primary-200'}`}
+                                    onClick={() => setSelectedPlan(plan)}
+                                  >
+                                    {plan.highlight && (
+                                      <div className="absolute top-3 right-3 bg-primary-500 text-white rounded-full px-3 py-1 text-xs font-bold">Most Popular</div>
+                                    )}
+                                    <div className="font-bold text-xl mb-1">{plan.name}</div>
+                                    <div className="text-3xl font-bold mb-1">${plan.price}/month</div>
+                                    <div className="text-gray-600 text-sm mb-2">{plan.description}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <div className="flex items-center gap-2">
+                                <Check size={16} className="text-green-500" />
+                                Unlimited visits
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Check size={16} className="text-green-500" />
+                                Priority booking
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Check size={16} className="text-green-500" />
+                                Guest passes included
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Check size={16} className="text-green-500" />
+                                Cancel anytime
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                  
+                  {/* Booking Summary & Confirmation */}
+                  {selectedTime && paymentModel && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="border-t border-gray-200 pt-6"
+                    >
+                      <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h3 className="font-bold mb-2">Booking Summary</h3>
+                        <div className="space-y-1 text-sm">
+                          <div className="flex justify-between">
+                            <span>Garden:</span>
+                            <span className="font-medium">{selectedGarden.name}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Date:</span>
+                            <span className="font-medium">{date ? format(date as Date, 'MMMM dd, yyyy') : ''}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Time:</span>
+                            <span className="font-medium">{selectedTime}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Payment:</span>
+                            <span className="font-medium">
+                              {paymentModel === 'one-time' ? 'One-time payment' : selectedPlan.name + ' Subscription'}
+                            </span>
+                          </div>
+                          <div className="flex justify-between border-t pt-2 font-bold">
+                            <span>Total:</span>
+                            <span>${paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <button
+                        className="btn-primary btn-lg w-full"
+                        onClick={handleBooking}
+                      >
+                        Confirm Booking - ${paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}
+                      </button>
+                    </motion.div>
+                  )}
                 </div>
               </motion.div>
             )}
           </div>
         </div>
       </div>
+      {confirmationAlert.open && (
+        <BookingConfirmationAlert
+          message={confirmationAlert.message}
+          onClose={() => setConfirmationAlert({ open: false, message: '' })}
+        />
+      )}
     </>
   );
 };

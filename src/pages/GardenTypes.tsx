@@ -13,31 +13,31 @@ interface GardenType {
 
 const gardenTypes: GardenType[] = [
   {
-    id: "wellness-gardens",
-    title: "Wellness Gardens",
-    description: "Peaceful spaces designed for yoga, meditation, and mindfulness practices. These gardens feature comfortable meditation areas, yoga decks, and tranquil water features.",
-    image: "https://images.pexels.com/photos/3637585/pexels-photo-3637585.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    benefits: ["Stress reduction", "Mindfulness practice", "Mental clarity", "Yoga and meditation"]
+    id: "gardening-gardens",
+    title: "Gardening",
+    description: "Productive spaces where users can plant, grow, and harvest their own vegetables, herbs, and flowers. These gardens feature raised beds, irrigation systems, and all the tools needed for successful urban farming.",
+    image: "https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg",
+    benefits: ["Fresh produce", "Sustainable living", "Gardening education", "Harvest your own food"]
   },
   {
     id: "social-gardens",
-    title: "Social Gardens",
+    title: "BBQ",
     description: "Perfect for gatherings and entertainment, these spaces include BBQ areas, comfortable seating, and ambient lighting for evening socializing.",
-    image: "https://images.pexels.com/photos/3637585/pexels-photo-3637585.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/708440/pexels-photo-708440.jpeg",
     benefits: ["Social gatherings", "BBQ facilities", "Entertainment areas", "Evening ambiance"]
   },
   {
     id: "pet-friendly-gardens",
-    title: "Pet-Friendly Gardens",
+    title: "Pet's Garden",
     description: "Specially designed gardens where you can bring your furry friends. These spaces include pet play areas, shaded spots, and water stations.",
-    image: "https://images.pexels.com/photos/3296546/pexels-photo-3296546.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/551628/pexels-photo-551628.jpeg",
     benefits: ["Pet exercise area", "Safe environment", "Pet-friendly features", "Water stations"]
   },
   {
     id: "sports-activity-gardens",
-    title: "Sports & Activity Gardens",
+    title: "Activity Parc",
     description: "Active spaces featuring mini-golf, stretching areas, and other recreational activities. Perfect for those looking to stay active while enjoying the outdoors.",
-    image: "https://images.pexels.com/photos/6208089/pexels-photo-6208089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/13993576/pexels-photo-13993576.jpeg",
     benefits: ["Active recreation", "Exercise space", "Sport facilities", "Fun activities"]
   },
 ];

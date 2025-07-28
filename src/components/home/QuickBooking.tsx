@@ -19,7 +19,7 @@ const locations = [
 
 const gardenTypes = [
   "All Gardens",
-  "Wellness Gardens",
+  "Gardening Gardens",
   "Social Gardens",
   "Pet-Friendly Gardens",
   "Sports & Activity Gardens"

@@ -19,39 +19,39 @@ interface Garden {
 const gardens: Garden[] = [
   {
     id: 1,
-    title: "Skyline Serenity",
-    type: "wellness-gardens",
-    image: "https://images.pexels.com/photos/3637585/pexels-photo-3637585.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    title: "Gardening",
+    type: "gardening-gardens",
+    image: "https://images.pexels.com/photos/1301856/pexels-photo-1301856.jpeg",
     location: "Downtown",
     rating: 4.9,
-    amenities: ["Yoga Area", "Meditation Space", "Herb Garden"]
+    amenities: ["Garden Beds", "Harvest Area", "Herb Garden"]
   },
   {
     id: 2,
-    title: "Social Heights",
+    title: "BBQ",
     type: "social-gardens",
-    image: "https://images.pexels.com/photos/3637585/pexels-photo-3637585.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/708440/pexels-photo-708440.jpeg",
     location: "Midtown",
     rating: 4.8,
     amenities: ["BBQ Grill", "Lounge Area", "Bar Setup"]
   },
   {
     id: 3,
-    title: "Paws Paradise",
+    title: "Pet's Garden",
     type: "pet-friendly-gardens",
-    image: "https://images.pexels.com/photos/3296546/pexels-photo-3296546.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/551628/pexels-photo-551628.jpeg",
     location: "East Side",
     rating: 4.7,
-    amenities: ["Pet Play Area", "Shaded Spots", "Water Station"]
+    amenities: ["Pet Play Area", "Shaded Spots"]
   },
   {
     id: 4,
-    title: "Active Terrace",
+    title: "Activity Parc",
     type: "sports-activity-gardens",
-    image: "https://images.pexels.com/photos/6208089/pexels-photo-6208089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "https://images.pexels.com/photos/13993576/pexels-photo-13993576.jpeg",
     location: "West Side",
     rating: 4.8,
-    amenities: ["Mini Golf", "Stretching Area", "Climbing Wall"]
+    amenities: ["Calisthenics", "Stretching Area"]
   },
 ];
 
@@ -83,7 +83,7 @@ const FeaturedGardens: React.FC = () => {
   };
 
   return (
-    <section className="section bg-gray-50">
+    <section className="section bg-gradient-to-b from-primary-50 via-white to-white py-20">
       <div className="container">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -92,10 +92,9 @@ const FeaturedGardens: React.FC = () => {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h2 className="heading-lg mb-4">Featured Garden Spaces</h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">
-            Explore our most popular rooftop retreats across the city. Each garden is uniquely designed 
-            to provide the perfect environment for relaxation, socializing, or activities.
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-3 text-primary-800">Find Your Perfect Garden Space</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            Discover a variety of rooftop gardens designed for wellness, socializing, pets, and activity. Explore and book your ideal space today.
           </p>
         </motion.div>
 
@@ -108,33 +107,33 @@ const FeaturedGardens: React.FC = () => {
           <Slider {...settings} className="featured-gardens-slider">
             {gardens.map((garden) => (
               <div key={garden.id} className="px-3 pb-6">
-                <div className="card h-full transition-all duration-300 hover:shadow-medium">
+                <div className="rounded-2xl overflow-hidden shadow-lg bg-white h-full flex flex-col transition-all duration-300 hover:shadow-xl">
                   <div className="relative h-64 w-full">
                     <img 
                       src={garden.image} 
                       alt={garden.title} 
                       className="h-full w-full object-cover"
                     />
-                    <div className="absolute top-3 left-3 bg-white rounded-full px-3 py-1 text-sm font-medium text-primary-600">
+                    <div className="absolute top-3 left-3 bg-primary-600 text-white rounded-full px-4 py-1 text-sm font-semibold shadow-md">
                       {garden.rating}★
                     </div>
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold mb-2">{garden.title}</h3>
-                    <p className="text-gray-500 mb-3">{garden.location}</p>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-xl font-bold mb-1 text-primary-800">{garden.title}</h3>
+                    <p className="text-gray-500 mb-3 font-medium">{garden.location}</p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {garden.amenities.map((amenity, index) => (
-                        <span key={index} className="inline-block bg-primary-50 text-primary-700 text-xs px-2 py-1 rounded">
+                        <span key={index} className="inline-block bg-primary-50 text-primary-700 text-xs px-3 py-1 rounded-full font-medium">
                           {amenity}
                         </span>
                       ))}
                     </div>
                     <Link 
                       to={`/garden-types/${garden.type}`} 
-                      className="text-primary-600 font-medium flex items-center hover:underline"
+                      className="btn-primary btn-sm w-full mt-auto flex items-center justify-center gap-2"
                     >
                       View Details
-                      <ArrowRight size={16} className="ml-1" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
                 </div>
@@ -143,8 +142,8 @@ const FeaturedGardens: React.FC = () => {
           </Slider>
         </motion.div>
 
-        <div className="mt-10 text-center">
-          <Link to="/garden-types" className="btn-outline btn-md">
+        <div className="mt-12 text-center">
+          <Link to="/garden-types" className="btn-outline btn-lg">
             View All Garden Spaces
           </Link>
         </div>

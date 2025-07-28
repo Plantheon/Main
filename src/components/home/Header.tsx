@@ -46,14 +46,14 @@ const Header: React.FC = () => {
           className={`flex items-center gap-2 font-display font-bold text-xl ${
             scrolled ? 'text-primary-700' : 'text-white'
           }`}
-          aria-label="Urban Oasis Home"
+          aria-label="Plantheon Home"
         >
           <Leaf 
             size={28} 
             className={scrolled ? 'text-primary-700' : 'text-white'} 
             aria-hidden="true"
           />
-          <span>Urban Oasis</span>
+          <span>Plantheon</span>
         </Link>
 
         <nav 
@@ -122,10 +122,10 @@ const Header: React.FC = () => {
                 to="/" 
                 className="flex items-center gap-2 text-primary-700"
                 onClick={() => setIsOpen(false)}
-                aria-label="Urban Oasis Home"
+                aria-label="Plantheon Home"
               >
                 <Leaf size={28} aria-hidden="true" />
-                <span className="font-display font-bold text-xl">Urban Oasis</span>
+                <span className="font-display font-bold text-xl">Plantheon</span>
               </Link>
               <button 
                 onClick={() => setIsOpen(false)}

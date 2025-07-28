@@ -10,8 +10,8 @@ const Home: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Urban Oasis | Rooftop Garden Retreats</title>
-        <meta name="description" content="Transform urban living with your personal rooftop retreat. Urban Oasis connects city dwellers with beautiful garden spaces." />
+        <title>Plantheon | Rooftop Garden Retreats</title>
+        <meta name="description" content="Transform urban living with your personal rooftop retreat. Plantheon connects city dwellers with beautiful garden spaces." />
       </Helmet>
       
       <Hero />

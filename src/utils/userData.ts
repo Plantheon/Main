@@ -7,6 +7,7 @@ export interface Booking {
   status: 'upcoming' | 'completed' | 'cancelled';
   cost: number;
   image: string;
+  paymentType: 'subscription' | 'one-time'; // Added field
 }
 
 export interface PaymentMethod {

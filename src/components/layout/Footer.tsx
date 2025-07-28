@@ -11,11 +11,11 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <Leaf size={24} className="text-primary-400" />
-              <span className="font-display font-bold text-xl">Urban Oasis</span>
+              <span className="font-display font-bold text-xl">Plantheon</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               Transform urban living with your personal rooftop retreat. 
-              Urban Oasis connects city dwellers with beautiful garden spaces.
+              Plantheon connects city dwellers with beautiful garden spaces.
             </p>
             <div className="flex space-x-4 pt-2">
               <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors" aria-label="Instagram">
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-lg mb-4">Garden Types</h4>
             <ul className="space-y-2">
-              {['Wellness Gardens', 'Social Gardens', 'Pet-Friendly Gardens', 'Sports & Activity Gardens'].map((type) => (
+              {['Gardening Gardens', 'Social Gardens', 'Pet-Friendly Gardens', 'Sports & Activity Gardens'].map((type) => (
                 <li key={type}>
                   <Link 
                     to={`/garden-types/${type.toLowerCase().replace(/\s+/g, '-')}`}
@@ -80,14 +80,14 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Mail size={18} />
-                <span>hello@urbanoasis.com</span>
+                <span>info@plantheon.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} Urban Oasis. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Plantheon. All rights reserved.</p>
           <div className="mt-4 md:mt-0 flex space-x-6">
             <Link to="/privacy-policy" className="hover:text-primary-400 transition-colors">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-primary-400 transition-colors">Terms of Service</Link>

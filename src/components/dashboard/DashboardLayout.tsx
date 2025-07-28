@@ -98,4 +98,4 @@ const DashboardLayout: React.FC = () => {
   );
 };
 
-export default DashboardLayout; 
+export default DashboardLayout;
