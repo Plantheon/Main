@@ -58,14 +58,21 @@ app.post('/api/auth/google', async (req, res) => {
     }
 
     // Exchange authorization code for tokens
+    const getRedirectUri = () => {
+      if (process.env.NODE_ENV === 'production') {
+        return process.env.FRONTEND_URL 
+          ? `${process.env.FRONTEND_URL}/auth/callback`
+          : `${req.get('host') ? `https://${req.get('host')}` : 'https://localhost:3001'}/auth/callback`;
+      }
+      return 'http://localhost:5173/auth/callback';
+    };
+
     const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: process.env.NODE_ENV === 'production'
-        ? `${process.env.FRONTEND_URL || 'https://your-app-name.onrender.com'}/auth/callback`
-        : 'http://localhost:5173/auth/callback'
+      redirect_uri: getRedirectUri()
     });
 
     const { access_token } = tokenResponse.data;
