@@ -12,7 +12,8 @@
     "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build",
-    "start": "node server/index.cjs"
+    "start": "node server/index.cjs",
+    "build:production": "npm run build && echo 'Build completed successfully'"
   },
   "dependencies": {
     "axios": "^1.6.0",

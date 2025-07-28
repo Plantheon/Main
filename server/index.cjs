@@ -13,11 +13,17 @@ app.use(cors({
   origin: [
     'http://localhost:5173', // Local development
     'https://yourdomain.com', // Production domain (replace with your real domain)
-    'https://main-1-rtxy.onrender.com' // (Optional) Render backend domain if needed
-  ],
+    'https://main-1-rtxy.onrender.com', // Render backend domain
+    process.env.FRONTEND_URL // Dynamic frontend URL
+  ].filter(Boolean), // Remove undefined values
   credentials: true
 }));
 app.use(express.json());
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/plantheon', {
@@ -58,7 +64,7 @@ app.post('/api/auth/google', async (req, res) => {
       code,
       grant_type: 'authorization_code',
       redirect_uri: process.env.NODE_ENV === 'production'
-        ? 'https://yourdomain.com/auth/callback'
+        ? `${process.env.FRONTEND_URL || 'https://your-app-name.onrender.com'}/auth/callback`
         : 'http://localhost:5173/auth/callback'
     });
 
@@ -101,6 +107,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
+// Serve React app for any non-API routes in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV}`);
 }); 
