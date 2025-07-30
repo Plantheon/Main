@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({
   origin: [
     'http://localhost:5173', // Local development
-    'https://yourdomain.com', // Production domain (replace with your real domain)
+    'https://plantheon-app.onrender.com', // Production domain
     'https://main-1-rtxy.onrender.com', // Render backend domain
     process.env.FRONTEND_URL // Dynamic frontend URL
   ].filter(Boolean), // Remove undefined values
@@ -62,17 +62,28 @@ app.post('/api/auth/google', async (req, res) => {
       if (process.env.NODE_ENV === 'production') {
         return process.env.FRONTEND_URL 
           ? `${process.env.FRONTEND_URL}/auth/callback`
-          : `${req.get('host') ? `https://${req.get('host')}` : 'https://localhost:3001'}/auth/callback`;
+          : `https://plantheon-app.onrender.com/auth/callback`;
       }
       return 'http://localhost:5173/auth/callback';
     };
+
+    const redirectUri = getRedirectUri();
+    
+    // Debug logging
+    console.log('=== Google OAuth Debug Info ===');
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
+    console.log('Using redirect URI:', redirectUri);
+    console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Missing');
+    console.log('Google Client Secret:', process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Missing');
+    console.log('==============================');
 
     const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: getRedirectUri()
+      redirect_uri: redirectUri
     });
 
     const { access_token } = tokenResponse.data;
@@ -106,7 +117,20 @@ app.post('/api/auth/google', async (req, res) => {
 
   } catch (error) {
     console.error('Google auth error:', error);
-    res.status(500).json({ error: 'Authentication failed' });
+    
+    // Log more detailed error information
+    if (error.response) {
+      console.error('Google API Error Response:', {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'Authentication failed',
+      details: error.response?.data || error.message 
+    });
   }
 });
 
