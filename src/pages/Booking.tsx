@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Users, MapPin, Filter, Search, ArrowLeft, Star, Check, Zap, Calendar as CalendarIcon, Repeat } from 'lucide-react';
+import { Clock, MapPin, Filter, Search, ArrowLeft, Star, Check, Zap, Calendar as CalendarIcon, Repeat } from 'lucide-react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { format } from 'date-fns';
@@ -81,25 +81,11 @@ const gardenTypes = ["All Types", "Gardening Garden", "Social Garden", "Pet-Frie
 
 const subscriptionPlans = [
   {
-    id: 'basic',
-    name: 'Basic',
-    price: 49,
-    description: 'Perfect for occasional garden visits and solo relaxation.',
-    highlight: false,
-  },
-  {
-    id: 'premium',
-    name: 'Premium',
-    price: 99,
-    description: 'Great for regular garden use with variety and premium features.',
+    id: 'multi-garden',
+    name: 'Multi-Garden Plan',
+    price: 50,
+    description: 'Access to all gardens with unlimited visits and premium features.',
     highlight: true,
-  },
-  {
-    id: 'ultimate',
-    name: 'Ultimate',
-    price: 199,
-    description: 'For true garden enthusiasts with unlimited access and priority.',
-    highlight: false,
   },
 ];
 
@@ -112,7 +98,7 @@ const Booking: React.FC = () => {
   const [paymentModel, setPaymentModel] = useState<'one-time' | 'subscription' | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const { user } = useAuth();
-  const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[1]); // Default to Premium
+  const [selectedPlan] = useState(subscriptionPlans[0]); // Default to Multi-Garden Plan
   const [confirmationAlert, setConfirmationAlert] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
 
   const filteredGardens = sampleGardens.filter(garden => {
@@ -129,10 +115,6 @@ const Booking: React.FC = () => {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-  };
-
-  const handlePaymentModelSelect = (model: 'one-time' | 'subscription') => {
-    setPaymentModel(model);
   };
 
   const handleBooking = () => {
@@ -164,18 +146,12 @@ const Booking: React.FC = () => {
       saveUserData(user.email, userData);
       setConfirmationAlert({
         open: true,
-        message: `Booking confirmed for ${selectedGarden.name} on ${format(date as Date, 'MMMM dd, yyyy')} at ${selectedTime} - ${paymentModel === 'one-time' ? 'One-time payment' : selectedPlan.name + ' Subscription'}: $${price}`
+        message: `Booking confirmed for ${selectedGarden.name} on ${format(date as Date, 'MMMM dd, yyyy')} at ${selectedTime} - ${paymentModel === 'one-time' ? 'One-time payment' : selectedPlan.name + ' Subscription'}: €${price}`
       });
       setSelectedGarden(null);
       setSelectedTime(null);
       setPaymentModel(null);
     }
-  };
-
-  const calculateSavings = (garden: Garden) => {
-    const monthlyOneTime = garden.oneTimePrice * 4; // Assuming 4 visits per month
-    const savings = monthlyOneTime - garden.subscriptionPrice;
-    return savings > 0 ? savings : 0;
   };
 
   return (
@@ -290,7 +266,7 @@ const Booking: React.FC = () => {
                           <h3 className="font-bold">{garden.name}</h3>
                           <div className="text-right">
                             <div className="text-sm text-gray-500">From</div>
-                            <div className="font-bold text-primary-600">${garden.oneTimePrice}/visit</div>
+                            <div className="font-bold text-primary-600">€{garden.oneTimePrice}/visit</div>
                           </div>
                         </div>
                         <div className="flex items-center text-gray-600 text-sm mb-2">
@@ -440,49 +416,40 @@ const Booking: React.FC = () => {
                                 </ul>
                               </div>
                               <div className="flex flex-col items-end">
-                                <span className="text-4xl font-bold text-gray-900">${selectedGarden.oneTimePrice}</span>
+                                <span className="text-4xl font-bold text-gray-900">€{selectedGarden.oneTimePrice}</span>
                                 <span className="text-gray-600 ml-1">/2 hours</span>
                               </div>
                             </div>
                           </div>
                         )}
                         {paymentModel === 'subscription' && (
-                          <div className="space-y-6">
-                            <div className="mb-2">
-                              <h4 className="font-bold text-lg mb-1">Choose Your Plan</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                {subscriptionPlans.map((plan) => (
-                                  <div
-                                    key={plan.id}
-                                    className={`relative border-2 rounded-lg p-6 cursor-pointer transition-all flex flex-col items-start space-y-2 ${selectedPlan.id === plan.id ? 'border-primary-500 bg-primary-50 shadow-lg' : 'border-gray-200 hover:border-primary-200'}`}
-                                    onClick={() => setSelectedPlan(plan)}
-                                  >
-                                    {plan.highlight && (
-                                      <div className="absolute top-3 right-3 bg-primary-500 text-white rounded-full px-3 py-1 text-xs font-bold">Most Popular</div>
-                                    )}
-                                    <div className="font-bold text-xl mb-1">{plan.name}</div>
-                                    <div className="text-3xl font-bold mb-1">${plan.price}/month</div>
-                                    <div className="text-gray-600 text-sm mb-2">{plan.description}</div>
-                                  </div>
-                                ))}
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h4 className="font-bold text-lg mb-1">Multi-Garden Plan</h4>
+                                <p className="text-gray-600 text-sm mb-2">Access to all gardens with unlimited visits</p>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    Unlimited visits to all gardens
+                                  </li>
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    Priority booking
+                                  </li>
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    Guest passes included
+                                  </li>
+                                  <li className="flex items-center gap-2">
+                                    <Check size={14} className="text-green-500" />
+                                    Cancel anytime
+                                  </li>
+                                </ul>
                               </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <div className="flex items-center gap-2">
-                                <Check size={16} className="text-green-500" />
-                                Unlimited visits
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Check size={16} className="text-green-500" />
-                                Priority booking
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Check size={16} className="text-green-500" />
-                                Guest passes included
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Check size={16} className="text-green-500" />
-                                Cancel anytime
+                              <div className="flex flex-col items-end">
+                                <span className="text-4xl font-bold text-gray-900">€{selectedPlan.price}</span>
+                                <span className="text-gray-600 ml-1">/month</span>
                               </div>
                             </div>
                           </div>
@@ -522,7 +489,7 @@ const Booking: React.FC = () => {
                           </div>
                           <div className="flex justify-between border-t pt-2 font-bold">
                             <span>Total:</span>
-                            <span>${paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}</span>
+                            <span>€{paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}</span>
                           </div>
                         </div>
                       </div>
@@ -531,7 +498,7 @@ const Booking: React.FC = () => {
                         className="btn-primary btn-lg w-full"
                         onClick={handleBooking}
                       >
-                        Confirm Booking - ${paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}
+                        Confirm Booking - €{paymentModel === 'one-time' ? selectedGarden.oneTimePrice : selectedPlan.price}
                       </button>
                     </motion.div>
                   )}
