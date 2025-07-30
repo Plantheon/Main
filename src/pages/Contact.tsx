@@ -84,16 +84,16 @@ const Contact: React.FC = () => {
       {/* Main Contact Section */}
       <div className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-              {/* Contact Form - Takes up 3/5 of the space */}
-              <div className="lg:col-span-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+              {/* Contact Form - Takes up 2/3 of the space */}
+              <div className="lg:col-span-2">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-lg shadow-md border border-gray-200 p-6"
+                  className="bg-white rounded-lg shadow-md border border-gray-200 p-8"
                 >
                   <div className="mb-6">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Send us a Message</h2>
@@ -186,7 +186,7 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Support Options Sidebar */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-1">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -194,14 +194,14 @@ const Contact: React.FC = () => {
                   viewport={{ once: true }}
                   className="h-full"
                 >
-                  <div className="grid grid-cols-1 gap-4 h-full">
+                  <div className="flex flex-col gap-6 h-full">
                     {/* Live Chat */}
-                    <div className="bg-blue-50 rounded-lg p-5 text-center">
-                      <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <MessageSquare className="h-6 w-6 text-blue-600" />
+                    <div className="bg-blue-50 rounded-lg p-6 text-center flex-1">
+                      <div className="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <MessageSquare className="h-7 w-7 text-blue-600" />
                       </div>
-                      <h3 className="font-bold text-gray-900 mb-2">Live Chat</h3>
-                      <p className="text-sm text-gray-600 mb-3">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Live Chat</h3>
+                      <p className="text-gray-600 mb-4 leading-relaxed">
                         Get instant help during business hours
                       </p>
                       <button className="btn-outline btn-sm w-full">
@@ -210,40 +210,19 @@ const Contact: React.FC = () => {
                     </div>
 
                     {/* Office Location */}
-                    <div className="bg-gray-50 rounded-lg p-5 text-center">
-                      <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <MapPin className="h-6 w-6 text-gray-600" />
+                    <div className="bg-gray-50 rounded-lg p-6 text-center">
+                      <div className="bg-gray-100 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <MapPin className="h-7 w-7 text-gray-600" />
                       </div>
-                      <h3 className="font-bold text-gray-900 mb-2">Visit Us</h3>
-                      <p className="text-sm text-gray-600">
-                        Bahnhofstraße 10<br />
-                        Stuttgart, 70192
-                      </p>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Visit Us</h3>
+                      <div className="text-gray-600 leading-relaxed">
+                        <p>Bahnhofstraße 10</p>
+                        <p>Stuttgart, 70192</p>
+                      </div>
                     </div>
 
                     {/* FAQ */}
-                    <div className="bg-green-50 rounded-lg p-5">
-                      <div className="text-center mb-4">
-                        <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <HelpCircle className="h-6 w-6 text-green-600" />
-                        </div>
-                        <h3 className="font-bold text-gray-900">Quick Help</h3>
-                      </div>
-                      <div className="space-y-3 text-sm">
-                        <div>
-                          <p className="font-medium text-gray-900 mb-1">How to book?</p>
-                          <p className="text-gray-600">Browse gardens → Select date → Book online</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900 mb-1">Cancel booking?</p>
-                          <p className="text-gray-600">24h notice via your dashboard</p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900 mb-1">What's included?</p>
-                          <p className="text-gray-600">Basic amenities + listed equipment</p>
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </motion.div>
               </div>
