@@ -1,9 +1,10 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Calendar, CreditCard, Settings, User, LogOut, Plus, Heart, HelpCircle } from 'lucide-react';
+import { Calendar, CreditCard, Settings, User, LogOut, Plus, Heart, HelpCircle, Home } from 'lucide-react';
 
 const navigationItems = [
+  { id: 'home', label: 'Back to Home', icon: Home, path: '/' },
   { id: 'overview', label: 'Overview', icon: User, path: '/dashboard' },
   { id: 'bookings', label: 'My Bookings', icon: Calendar, path: '/dashboard/bookings' },
   { id: 'payments', label: 'Payment Methods', icon: CreditCard, path: '/dashboard/payments' },
@@ -40,9 +41,9 @@ const DashboardLayout: React.FC = () => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.path;
                   return (
-                    <a
+                    <Link
                       key={item.id}
-                      href={item.path}
+                      to={item.path}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-left transition-colors ${
                         isActive
                           ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-600'
@@ -51,7 +52,7 @@ const DashboardLayout: React.FC = () => {
                     >
                       <Icon size={20} />
                       {item.label}
-                    </a>
+                    </Link>
                   );
                 })}
               </nav>
@@ -60,10 +61,10 @@ const DashboardLayout: React.FC = () => {
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <h4 className="font-medium text-gray-900 mb-3">Quick Actions</h4>
                 <div className="space-y-2">
-                  <a href="/booking" className="w-full flex items-center gap-3 px-4 py-2 text-left text-gray-700 hover:bg-gray-50 rounded-md">
+                  <Link to="/booking" className="w-full flex items-center gap-3 px-4 py-2 text-left text-gray-700 hover:bg-gray-50 rounded-md">
                     <Plus size={18} />
                     <span className="text-sm">New Booking</span>
-                  </a>
+                  </Link>
                   <button className="w-full flex items-center gap-3 px-4 py-2 text-left text-gray-700 hover:bg-gray-50 rounded-md">
                     <Heart size={18} />
                     <span className="text-sm">Favorites</span>
