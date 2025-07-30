@@ -4,6 +4,7 @@ import { Calendar as CalendarIcon, MapPin, Search } from 'lucide-react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -18,18 +19,19 @@ const locations = [
 ];
 
 const gardenTypes = [
-  "All Gardens",
-  "Gardening Gardens",
-  "Social Gardens",
-  "Pet-Friendly Gardens",
-  "Sports & Activity Gardens"
+  "All Types",
+  "Gardening Garden",
+  "Social Garden",
+  "Pet-Friendly Garden",
+  "Sports & Activity Garden"
 ];
 
 const QuickBooking: React.FC = () => {
   const [date, setDate] = useState<Value>(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [location, setLocation] = useState('');
-  const [gardenType, setGardenType] = useState('All Gardens');
+  const [gardenType, setGardenType] = useState('All Types');
+  const navigate = useNavigate();
   
   const handleDateChange = (value: Value) => {
     setDate(value);
@@ -38,8 +40,28 @@ const QuickBooking: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // This would typically navigate to search results with these filters
-    console.log({ date, location, gardenType });
+    
+    // Create URL search parameters
+    const searchParams = new URLSearchParams();
+    
+    if (date) {
+      searchParams.set('date', format(date as Date, 'yyyy-MM-dd'));
+    }
+    
+    if (location) {
+      searchParams.set('location', location);
+    } else {
+      searchParams.set('location', 'All Locations');
+    }
+    
+    if (gardenType && gardenType !== 'All Types') {
+      searchParams.set('gardenType', gardenType);
+    } else {
+      searchParams.set('gardenType', 'All Types');
+    }
+    
+    // Navigate to booking page with search parameters
+    navigate(`/booking?${searchParams.toString()}`);
   };
 
   return (

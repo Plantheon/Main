@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import { Clock, MapPin, Filter, Search, ArrowLeft, Star, Check, Zap, Calendar as CalendarIcon, Repeat } from 'lucide-react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -90,6 +91,7 @@ const subscriptionPlans = [
 ];
 
 const Booking: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [date, setDate] = useState<Value>(new Date());
   const [location, setLocation] = useState("All Locations");
   const [gardenType, setGardenType] = useState("All Types");
@@ -100,6 +102,32 @@ const Booking: React.FC = () => {
   const { user } = useAuth();
   const [selectedPlan] = useState(subscriptionPlans[0]); // Default to Multi-Garden Plan
   const [confirmationAlert, setConfirmationAlert] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
+
+  // Set initial filters from URL search parameters
+  useEffect(() => {
+    const urlDate = searchParams.get('date');
+    const urlLocation = searchParams.get('location');
+    const urlGardenType = searchParams.get('gardenType');
+
+    if (urlDate) {
+      try {
+        const parsedDate = new Date(urlDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setDate(parsedDate);
+        }
+      } catch (error) {
+        console.error('Invalid date format in URL:', urlDate);
+      }
+    }
+
+    if (urlLocation) {
+      setLocation(urlLocation);
+    }
+
+    if (urlGardenType) {
+      setGardenType(urlGardenType);
+    }
+  }, [searchParams]);
 
   const filteredGardens = sampleGardens.filter(garden => {
     const locationMatch = location === "All Locations" || garden.location === location;
